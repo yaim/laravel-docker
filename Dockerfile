@@ -1,20 +1,29 @@
-FROM php:7.3.11-fpm-alpine3.10
+FROM php:7.3.11-fpm-buster
+
+ARG DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /var/www
 
-RUN apk add --no-cache --virtual .build-deps \
-    $PHPIZE_DEPS \
-    zlib-dev \
+RUN apt-get update && apt-get install -y \
+    apt-utils
+
+RUN apt-get install -y \
+    build-essential \
+    mariadb-client \
+    libpq-dev \
     libzip-dev \
     libxml2-dev \
-    postgresql-dev \
     libpng-dev \
-    php-soap
-
-RUN apk add --no-cache \
-    postgresql \
-    libzip \
-    libpng
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
+    unzip \
+    git \
+    bash-completion \
+    curl
 
 RUN docker-php-ext-install \
     pdo_mysql \
@@ -26,12 +35,12 @@ RUN docker-php-ext-install \
     soap \
     gd
 
+RUN apt -y autoremove
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN apk del -f .build-deps
-
-RUN addgroup -g 1000 www
-RUN adduser -u 1000 -D -s /bin/bash -G www www
+RUN addgroup --gid 1000 www
+RUN adduser -uid 1000 --shell /bin/bash --disabled-password --gecos "" --gid 1000 www
 
 RUN chown www:www ./
 
