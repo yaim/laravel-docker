@@ -1,4 +1,4 @@
-FROM php:7.3.11-fpm-buster
+FROM php:7.4.5-fpm-buster
 
 ARG DEBIAN_FRONTEND=noninteractive
 
