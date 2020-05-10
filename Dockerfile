@@ -1,4 +1,4 @@
-FROM php:7.3.11-fpm-buster
+FROM php:7.4.5-fpm-buster
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -16,6 +16,7 @@ RUN apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
+    libonig-dev \
     locales \
     zip \
     jpegoptim optipng pngquant gifsicle \
